@@ -1,0 +1,286 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <iomanip>
+#include <limits>
+#include <clocale>
+using namespace std;
+
+class Customer {
+private:
+    int customerNumber;
+    string name;
+    string surname;
+    int age;
+    string product;
+    double price;
+    double amountPaid;
+    string notes;
+
+public:
+    Customer() : customerNumber(0), age(0), price(0.0), amountPaid(0.0) {}
+
+    void setCustomerNumber(int num) {
+        customerNumber = num;
+    }
+
+    int getCustomerNumber() const { return customerNumber; }
+
+    void inputCustomerInfo() {
+        cout << "\n=== Musteri Bilgileri ===" << endl;
+        cout << "Musteri numarasi: ";
+        while (!(cin >> customerNumber)) {
+            cout << "Gecersiz giris! Lutfen bir sayi girin: ";
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        }
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+        cout << "Musteri adi: ";
+        getline(cin, name);
+        cout << "Musteri soyadi: ";
+        getline(cin, surname);
+        cout << "Musteri yasi: ";
+        while (!(cin >> age) || age <= 0) {
+            cout << "Gecersiz yas! Lutfen pozitif bir sayi girin: ";
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        }
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    }
+
+    void inputPurchaseInfo() {
+        cout << "\n=== Satin Alma Bilgileri ===" << endl;
+        cout << "Urun adi: ";
+        getline(cin, product);
+        cout << "Urun fiyati (TL): ";
+        while (!(cin >> price) || price < 0) {
+            cout << "Gecersiz fiyat! Lutfen pozitif bir sayi girin: ";
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        }
+        cout << "Odenen miktar (TL): ";
+        while (!(cin >> amountPaid) || amountPaid < price) {
+            cout << "Gecersiz miktar! Lutfen urun fiyatindan buyuk bir sayi girin: ";
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        }
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        cout << "Ek notlar: ";
+        getline(cin, notes);
+    }
+
+    void editCustomerInfo() {
+        cout << "\n=== Musteri Bilgilerini Duzenle ===" << endl;
+        cout << "Mevcut musteri numarasi: " << customerNumber << endl;
+        cout << "Mevcut ad: " << name << endl;
+        cout << "Yeni ad (degistirmek icin yazin, ayni kalsin icin Enter'a basin): ";
+        string newName;
+        getline(cin, newName);
+        if (!newName.empty()) name = newName;
+
+        cout << "Mevcut soyad: " << surname << endl;
+        cout << "Yeni soyad (degistirmek icin yazin, ayni kalsin icin Enter'a basin): ";
+        string newSurname;
+        getline(cin, newSurname);
+        if (!newSurname.empty()) surname = newSurname;
+
+        cout << "Mevcut yas: " << age << endl;
+        cout << "Yeni yas (degistirmek icin yazin, ayni kalsin icin 0 yazin): ";
+        int newAge;
+        while (!(cin >> newAge) || newAge < 0) {
+            cout << "Gecersiz yas! Lutfen pozitif bir sayi girin: ";
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        }
+        if (newAge > 0) age = newAge;
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    }
+
+    void editPurchaseInfo() {
+        cout << "\n=== Satin Alma Bilgilerini Duzenle ===" << endl;
+        cout << "Mevcut urun: " << product << endl;
+        cout << "Yeni urun (degistirmek icin yazin, ayni kalsin icin Enter'a basin): ";
+        string newProduct;
+        getline(cin, newProduct);
+        if (!newProduct.empty()) product = newProduct;
+
+        cout << "Mevcut fiyat: " << price << " TL" << endl;
+        cout << "Yeni fiyat (degistirmek icin yazin, ayni kalsin icin 0 yazin): ";
+        double newPrice;
+        while (!(cin >> newPrice) || newPrice < 0) {
+            cout << "Gecersiz fiyat! Lutfen pozitif bir sayi girin: ";
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        }
+        if (newPrice > 0) price = newPrice;
+
+        cout << "Mevcut odenen miktar: " << amountPaid << " TL" << endl;
+        cout << "Yeni odenen miktar (degistirmek icin yazin, ayni kalsin icin 0 yazin): ";
+        double newAmount;
+        while (!(cin >> newAmount) || newAmount < price) {
+            cout << "Gecersiz miktar! Lutfen urun fiyatindan buyuk bir sayi girin: ";
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        }
+        if (newAmount > 0) amountPaid = newAmount;
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+        cout << "Mevcut notlar: " << notes << endl;
+        cout << "Yeni notlar (degistirmek icin yazin, ayni kalsin icin Enter'a basin): ";
+        string newNotes;
+        getline(cin, newNotes);
+        if (!newNotes.empty()) notes = newNotes;
+    }
+
+    void displayReceipt() const {
+        cout << "\n==========================================" << endl;
+        cout << "              SATIS FISI                  " << endl;
+        cout << "==========================================" << endl;
+        cout << "Musteri Numarasi: " << customerNumber << endl;
+        cout << "Musteri: " << name << " " << surname << endl;
+        cout << "Yas: " << age << endl;
+        cout << "------------------------------------------" << endl;
+        cout << "Urun: " << product << endl;
+        cout << "Fiyat: " << fixed << setprecision(2) << price << " TL" << endl;
+        cout << "Odenen: " << amountPaid << " TL" << endl;
+        cout << "Para Ustu: " << (amountPaid - price) << " TL" << endl;
+        cout << "------------------------------------------" << endl;
+        cout << "Notlar: " << notes << endl;
+        cout << "==========================================" << endl;
+    }
+};
+
+class CustomerSystem {
+private:
+    vector<Customer> customers;
+
+    bool isCustomerNumberExists(int number) {
+        for (const auto& customer : customers) {
+            if (customer.getCustomerNumber() == number) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+public:
+    void addCustomer() {
+        Customer customer;
+        int number;
+
+        do {
+            cout << "\nMusteri numarasi girin: ";
+            while (!(cin >> number) || number <= 0) {
+                cout << "Gecersiz numara! Lutfen pozitif bir sayi girin: ";
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            }
+            if (isCustomerNumberExists(number)) {
+                cout << "Bu musteri numarasi zaten kullaniliyor! Lutfen farkli bir numara girin." << endl;
+            }
+        } while (isCustomerNumberExists(number));
+
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        customer.setCustomerNumber(number);
+        customer.inputCustomerInfo();
+        customer.inputPurchaseInfo();
+        customers.push_back(customer);
+        cout << "\nMusteri basariyla eklendi!" << endl;
+    }
+
+    void editCustomer() {
+        int number;
+        cout << "\nDuzenlenecek musteri numarasini girin: ";
+        while (!(cin >> number) || number <= 0) {
+            cout << "Gecersiz numara! Lutfen pozitif bir sayi girin: ";
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        }
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+        for (auto& customer : customers) {
+            if (customer.getCustomerNumber() == number) {
+                customer.editCustomerInfo();
+                customer.editPurchaseInfo();
+                cout << "\nMusteri bilgileri basariyla guncellendi!" << endl;
+                return;
+            }
+        }
+        cout << "\nMusteri numarasi bulunamadi!" << endl;
+    }
+
+    void displayCustomer() {
+        int number;
+        cout << "\nGoruntulenecek musteri numarasini girin: ";
+        while (!(cin >> number) || number <= 0) {
+            cout << "Gecersiz numara! Lutfen pozitif bir sayi girin: ";
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        }
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+        for (const auto& customer : customers) {
+            if (customer.getCustomerNumber() == number) {
+                customer.displayReceipt();
+                return;
+            }
+        }
+        cout << "\nMusteri numarasi bulunamadi!" << endl;
+    }
+
+    void displayAllCustomers() {
+        if (customers.empty()) {
+            cout << "\nSistemde hic musteri bulunmuyor!" << endl;
+            return;
+        }
+
+        cout << "\n=== Tum Musteriler ===" << endl;
+        for (const auto& customer : customers) {
+            customer.displayReceipt();
+        }
+    }
+};
+
+int main() {
+    setlocale(LC_ALL, "Turkish");
+    CustomerSystem system;
+    char choice;
+
+    do {
+        cout << "\n=== Musteri Satin Alma Sistemi ===" << endl;
+        cout << "1. Yeni musteri ekle" << endl;
+        cout << "2. Musteri bilgilerini duzenle" << endl;
+        cout << "3. Musteri fisini goruntule" << endl;
+        cout << "4. Tum musterileri goruntule" << endl;
+        cout << "5. Cikis" << endl;
+        cout << "Seciminizi girin (1-5): ";
+
+        while (!(cin >> choice) || (choice < '1' || choice > '5')) {
+            cout << "Gecersiz secim! Lutfen 1-5 arasi bir sayi girin: ";
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        }
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+        switch (choice) {
+        case '1':
+            system.addCustomer();
+            break;
+        case '2':
+            system.editCustomer();
+            break;
+        case '3':
+            system.displayCustomer();
+            break;
+        case '4':
+            system.displayAllCustomers();
+            break;
+        case '5':
+            cout << "Sistemi kullandiginiz icin tesekkurler!" << endl;
+            break;
+        }
+    } while (choice != '5');
+
+    return 0;
+}
