@@ -60,8 +60,8 @@ public:
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
         }
         cout << "Odenen miktar (TL): ";
-        while (!(cin >> amountPaid) || amountPaid < price) {
-            cout << "Gecersiz miktar! Lutfen urun fiyatindan buyuk bir sayi girin: ";
+        while (!(cin >> amountPaid) || amountPaid < 0) {
+            cout << "Gecersiz miktar! Lutfen 0 veya daha buyuk bir sayi girin: ";
             cin.clear();
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
         }
@@ -118,8 +118,8 @@ public:
         cout << "Mevcut odenen miktar: " << amountPaid << " TL" << endl;
         cout << "Yeni odenen miktar (degistirmek icin yazin, ayni kalsin icin 0 yazin): ";
         double newAmount;
-        while (!(cin >> newAmount) || newAmount < price) {
-            cout << "Gecersiz miktar! Lutfen urun fiyatindan buyuk bir sayi girin: ";
+        while (!(cin >> newAmount) || newAmount < 0) {
+            cout << "Gecersiz miktar! Lutfen 0 veya daha buyuk bir sayi girin: ";
             cin.clear();
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
         }
@@ -144,7 +144,10 @@ public:
         cout << "Urun: " << product << endl;
         cout << "Fiyat: " << fixed << setprecision(2) << price << " TL" << endl;
         cout << "Odenen: " << amountPaid << " TL" << endl;
-        cout << "Para Ustu: " << (amountPaid - price) << " TL" << endl;
+        if (amountPaid >= price)
+            cout << "Para Ustu: " << fixed << setprecision(2) << (amountPaid - price) << " TL" << endl;
+        else
+            cout << "Eksik Odeme: " << fixed << setprecision(2) << (price - amountPaid) << " TL" << endl;
         cout << "------------------------------------------" << endl;
         cout << "Notlar: " << notes << endl;
         cout << "==========================================" << endl;
